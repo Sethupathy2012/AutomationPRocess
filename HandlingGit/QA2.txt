@@ -1,0 +1,790 @@
+Alter PROCEDURE [dbo].[spRPTSummerSchoolApplication] 
+  @SchoolID     VARCHAR(500), 
+                                                      @GradeLevelID VARCHAR(100), 
+                                                      @CounsellorID VARCHAR(4000), 
+                                                      @StudentID    VARCHAR(MAX),
+  @StaffID VARCHAR(4000), 
+                                                      @schoolyearid INT, 
+                                                      @SortOrder    VARCHAR(10) 
+/***************************************************************************************************************************************************
+PROCEDURE NAME      : [sprptSummerSchoolApplication] 
+AUTHOR          :Smruti Patra (smpatra@microsoft.com) 
+CREATED          : 12/19/2013 
+DESCRIPTION        : THis procedure will display information Student Truancy 
+CALLED BY        : Report 
+EXAMPLE          : 
+exec sprptSummerSchoolApplication @SchoolID=N'920',@GradeLevelID=N'07,08,09,10,11,12,TE',@CounsellorID=N'-1,603748,8516,26740,611310,600240',@StudentID=N'1168655,1169053,793471,1155844,794927,747533,1226960,1236654,934113,1095918,1579932,1580012,795523,13
+91744,896461,879398,938502,794015,764723,833809,765820,1375671,936864,1207930,1378569,896375,1315762,803568,1204179,1362686,1163652,1379207,750410,1035547,1204687,1532372,1257197,796355,1576339,749780,778600,104887,1069474,220869,1263798,970146,763771,939
+545,865024,1162693,925965,796649,1094577,1147939,794864,796330,23176,1140009,1109294,794832,1181661,1085519,1126810,860848,1237338,36786,1358544,852635,1004895,1050388,1227764,1355501,793583,795646,1039307,918191,795964,1170897,1168856,1107815,1097082,131
+0950,1156058,981920,751957,7402,934759,432218,895893,1091915,925963,849291,775633,1123691,868735,1569747,1139590,1177734,1206207,872941,911407,803757,1034004,868374,1363760,1084708,340048,1428288,969693,819142,899082,1120872,868761,789006,1261937,1239722,
+1379664,75602,795960,878994,934945,895961,1056192,1114683,1052716,1432402,752642,1164997,848653,905296,1241139,796832,906509,1235352,901748,1195149,796672,514641,787229,794297,1067734,1125860,795698,1120855,1361891,1435424,1270450,921203,7002,796064,93355
+2,751473,1199319,1543939,1543345,1363514,969521,1086534,683155,969903,975921,897291,1197621,30304,1224301,1419491,2084727,1479853,762815,794630,1186083,30721,1090743,1192836,970120,34672,1587536,774170,251811,794915,795898,1481885,751678,795910,1127189,14
+81326,1379672,752027,1054135,1184694,1355348,935318,1366243,946551,1255664,966083,1139796,1049637,907441,794423,787768,1372352,775606,1425883,1419679,890591,928055,774355,1369431,1077386,1379223,823697,1262340,1523589,1182702,752048,853850,919338,795223,3
+83336,1484394,1093759,1192298,105082,793367,534535,1088544,1088574,883031,1234793,893274,970138,1126046,942237,1269826,1150654,970547,795301,793525,753584,47755,1364905,1094430,1080106,795346,752107,1125830,1063813,908477,1125139,249943,35384,1170989,8917
+33,932256,796253,852118,761892,787460,1056735,790435,908659,794102,1077586,1315910,1300991,893758,848845,787366,969522,841534,1153333,795826,1362475,1193994,868911,1120870,774746,753564,947359,1038865,751955,965792,1140010,1288685,1428191,1589586,1261617,
+1077589,1048731,762028,1094407,868939,794028,1251012,1031231,874874,1099551,1240872,864430,1313006,753004,1221316,906801,872015,871863,878472,929751,1042564,1379002,369540,368840,190865,1125875,796441,796061,970557,2079657,907761,1225746,1037099,1085539,1
+162426,1065847,984866,1242238,1247657,1362721,1522983,911707,988395,562861,562863,562862,47722,1040276,1038047,919582,933702,935301,894504,1155994,976167,796833,36872,1153657,1237281,795893,998589,820912,796392,845718,928251,969918,787045,910737,1240641,1
+183898,1039030,868920,533434,1040503,868125,1272590,1238163,1024656,1367215,1022649,1204176,1020725,794683,978508,802500,1156197,955232,1309824,862260,1156436,908559,972685,1490797,975930,23739,1420003,1136875,1163628,910822,1369217,1181949,863695,1252572
+,809143,1134177,803360,763643,1236535,775081,1047329,1045844,739322,866569,969933,1363323,1213224,1081520,532095,7706,1067807,134262,1034342,747516,763343,2096521,763925,222897,222896,222898,1157081,897002,922892,1489761,819132,1292019,1022662,1193767,119
+1086,1050368,1200402,1056918,1309809,978945,795322,1261912,1095343,665071,1161825,19734,1363967,795702,906744,777318,753583,969732,1113503,794655,1068637,739953,2082089,853297,1317615,917340,1588595,1531046,898642,975729,1142759,1194436,865938,1056714,108
+5722,1106935,751663,751661,1049575,887198,1362719,1047016,1112881,383236,795868,919538,1283636,801816,1176407,1035879,1195652,1114719,925723,952432,1113057,1108546,1137268,1163185,1367185,1038048,1537224,883347,1563969,910582,875817,1223661,326483,980085,
+803756,1364475,898652,1210061,934645,1111508,1582904,1364904,1277013,1199944,977814,834924,1505590,890012,968698,969546,795105,1033348,1302766,1067062,1194240,1203436,1554185,1554306,760320,221662,965648,867572,1050986,1048216,1153602,848906,793790,125331
+6,803581,1238498,883293,1588955,794230,908818,1064317,801371,1181555,1213120,1251046,795058,795059,851076,951115,1307438,1083875,1195891,1197249,801813,1253648,1039714,1092480,1311175,1263851,1483949,882816,877836,868819,883693,1038357,1119910,795040,9699
+31,793511,861134,795210,796095,1183597,803686,1148049,793521,4998,1133664,725682,1262154,866012,863149,1182691,793519,754502,296727,869151,794243,1237774,1362256,879296,136121,136125,794847,907395,871240,1364195,872836,1168249,975409,369159,892421,1050032
+,1354225,1168869,1290792,1147379,1365251,991068,795095,1118966,793477,1053967,414362,752058,795075,972698,779294,1141427,1197674,1497603,1379675,1356301,1213766,847491,353564,897551,776039,941641,912631,796045,1168712,751965,753409,1208778,875721,1363111,
+1034370,1195496,966293,953117,763261,1176464,1537476,983250,765829,1266828,1120876,1262202,357166,534773,1206552,779532,1400222,794073,969992,860806,1026314,132738,1152665,1098427,1586291,1239034,1265793,1265837,1267267,1093262,796352,1183295,1168243,1168
+440,1256319,752049,1161505,1136559,882587,803964,898741,866952,1122204,1257306,970312,1048402,1139612,820491,804349,792182,795281,1083867,881742,1049581,567298,1366824,763924,354882,981541,357501,536521,536520,1287339,1029058,1364655,794883,1062969,136831
+2,1213445,1081229,1126037,1286572,793567,802768,794517,445809,445426,1237562,58317,1286238,1274805,1588181,1330845,1090541,1276737,1584579,1538638,793575,36579,2082072,1237129,761853,795942,725981,725831,1588442,1077144,938276,793592,1239362,1197494,12075
+67,935398,796449,1061975,751853,1280157,1113250,1092735,912881,1163561,869204,749152,1242390,795637,1367572,1169052,1363039,875921,1482841,909016,909015,788018,776357,975936,698458,1561705,167973,801996,794819,984937,36557,751158,1048735,1066129,923065,11
+37638,795627,1085721,939330,1566686,1559791,1559821,1576685,1086518,1195495,1530040,803569,1362481,891086,1128196,1195715,1196747,747224,872800,1468506,430416,1362131,1052124,793915,1545183,864609,1193771,174257,795932,1434988,1171000,1161525,1153952,1248
+345,1128113,1267259,874632,1108638,1369477,151800,794051,939966,821384,796100,951855,1522246,978090,1369125,910234,34481,796456,951024,1364183,1369754,1369756,1048420,1236152,747948,893473,36590,895730,894158,1363114,1576885,1443449,1027414,1137471,126579
+4,795037,1253003,1195278,793864,898113,1178698,1108946,1233386,1081451,869342,794682,1157013,793852,794207,867116,957663,875674,1092034,1362485,1026162,895258,895261,1113149,1264280,1126466,934995,1049289,1064842,1085903,951199,1178000,1379333,954783,1085
+520,946559,1437985,978916,1165584,1194368,1443103,1389331,1387986,1443080,1443101,1443093,1545626,1019041,1199642,794117,174815,793913,1412614,1134199,796075,880381,1193838,793863,880807,1077797,977825,1136553,384177,752634,1043200,1362921,890349,1389802,
+795050,933334,30835,354097,908096,2084293,1036084,795642,748713,1287478,1377289,1362247,446122,444382,975750,927090,1362708,794669,1171267,908014,2084554,923233,853369,1241575,353830,920562,581408,1041429,1183757,1083389,1112685,1180420,1313210,911952,119
+9221,1119165,794010,1077189,1032714,895016,794425,1191780,1118577,853933,1262965,1263593,1113059,1362693,1079660,1394330,1182274,970107,1442563,764796,1193630,1530641,1235366,795258,1539453,1198643,761354,1110085,1071453,912796,850313,1184752,934220,79427
+9,851992,1193789,939213,794475,1114485,793994,1195725,1047479,794328,852553,1168667,1262979,147375,1378552,1239894,1152930,1366223,1306084,134135,1050578,1228245,980145,854591,609760,1151917,1482928,794719,942061,1182077,1267020,975944,766320,788023,97074
+2,35468,1037816,1261939,794070,1154184,898363,1064269,762510,1054698,1375430,1092931,1237382,249598,1280529,1168436,1057947,865413,1066366,1070150,1367100,338850,1546608,1356545,935390,1249251,1092333,1362870,751659,878634,1222228,908754,796710,1195658,93
+4934,793859,941665,752619,794237,1262590,1069622,1305390,911568,1097055,1168252,940414,804956,793487,1164785,795114,878382,796824,958821,796054,1080286,428386,1125187,1017843,1563271,1094000,801578,1270215,1050387,860834,795531,751460,1418290,1367626,1234
+708,1120735,669136,1364897,796488,1234094,860710,1206515,1379667,1313772,1379877,1198745,921230,765498,778000,795143,1020476,977299,1182140,1195156,905708,808960,1067812,1148865,179375,1195777,1206084,1065467,1133626,820907,1363761,1027421,849257,747534,1
+252476,1093287,793720,1162544,1121987,1176844,1112029,1140146,883974,1205252,918765,520517,1220951,753996,853027,968704,849583,795677,1354751,1365539,881175,1263152,1066273,712319,800813,695387,910921,1204178,1284972,1096294,791461,1052796,1487502,919044,
+1139999,1008581,1352050,1058902,1366598,853479,92886,873223,534167,969944,933116,1043361,1064204,1364643,1056851,1295797,1150579,1212766,507377,794863,852422,1105145,667058,1234798,23879,23656,1080699,905156,795867,750609,1038262,1163314,933580,1213065,10
+64524,875695,1361684,1067817,1085079,1278116,1077102,1062865,779786,1092515,1176477,898961,413170,1592928,1592941,1358470,1358469,1229871,935598,1199836,804176,764215,1085743,912434,1162508,911741,36793,1240469,992992,795232,1147499,531458,1093366,766131,
+1092116,897710,934029,875122,1132935,1370535,1078339,1560066,893591,1559909,1169250,796631,1355717,1368090,1589957,952003,1241723,789531,1066076,1097643,864103,1254670,1254621,1050512,860897,1363973,1099548,910325,179364,725988,1375159,340494,1185465,1418
+603,1068228,946270,920056,1071668,929210,1271815,1121682,911320,1163648,1080114,793361,630915,862990,979815,762457,1040516,1080648,1054016,1262995,762319,1013767,788295,1105118,776416,1071276,857318,929709,1282630,790206,1189597,1189598,750917,763133,9103
+23,853965,871164,881356,1535636,1063199,913034,876616,880911,751108,1106730,752446,877859,938797,853015,1363541,1363542,1240752,795312,1563893,1168045,909154,752059,1081218,1517502,933742,897238,1264126,796329,1178809,1135777,919995,794908,763409,1333078,
+107228,1051777,1237212,1249884,752330,220436,851157,1106761,1577653,884106,1176961,47325,1153991,753588,751855,1368699,931140,918601,796062,1240738,1243666,904887,1065925,848947,932708,1364830,1136033,969313,948272,764765,1168661,1533488,1094273,1205483,7
+24778,796291,1414329,809011,781018,1198404,1095347,103843,973200,1162157,1577042,562737,562738,1355900,759236,1208642,1261216,1378574,1176611,150830,809711,1560195,804379,794302,795452,796089,1165231,1255596,1268176,1308866,1364667,777536,1247521,1368083,
+338664,794861,893944,1365529,932864,1180243,1077984,1221357,879796,854925,1242569,957316,728800,970339,34001,1122168,752381,1055801,889818,852234,970124,1375483,1190942,1227098,897311,933180,938977,1316121,795340,777583,1055655,1376285,1492927,802128,1431
+238,907829,762232,866117,2090593,794434,7050,1150475,370609,35387,796559,1099545,794626,1114517,763245,801402,1553908,1553892,1049895,1369770,788409,750924,1369251,958644,851271,1363876,1369734,251849,1242199,1379830,766308,970106,796701,808751,294976,109
+1939,1050565,1050976,796447,1210174,801410,881092,820957,337959,934830,758847,1038239,94827,1365550,794943,1081085,1104985,1095537,1401003,791183,1176591,1118554,903248,879134,1120863,1266052,1163319,753184,950385,3650,1125661,942227,795708,1139600,748583
+,669146,809353,907502,1109426,841141,1478743,1066798,1262225,969735,1038787,773419,955604,1155650,795632,938099,867307,758700,47085,1077783,1368937,865200,1546689,793709,875960,761033,967769,2083729,1545616,1365353,669142,1389954,863802,1227157,1080748,22
+1203,1081330,904163,1200274,1090347,1376149,1283967,1114501,894204,1238853,1261472,1247642,849563,1206767,885171,1583094,1153768,1160847,1111739,849652,1207504,1114515,806182,777149,1484551,1306338,1035733,932205,655206,762760,1099361,1378335,759105,14035
+42,895476,1037056,795755,1118564,853679,133954,1163868,1054699,1077183,1196998,2083944,898274,1083888,925185,1168233,1265583,932478,907108,1264326,869172,1484852,1514679,1513029,780099,897734,293971,920285,889883,801398,1226103,801808,1356487,1205918,8016
+23,1484584,878597,1339401,845195,1444591,756614,1198629,968906,1077178,796840,1250055,1209588,5674,794266,1281067,1109772,1219568,1133744,1137687,1134002,1234100,1197044,796182,1077774,1090924,847089,796530,763219,2089774,1099320,1205326,793579,1098515,13
+65120,920788,1253995,1362269,853886,1077581,1241943,1540424,1035326,1202980,795940,1118771,1102963,1304674,373368,1163645,987320,853609,1574893,1009269,959024,519722,773135,2081979,2081978,1205967,854298,1082717,752047,220667,953954,819402,1095444,802126,
+34818,1363753,1080806,1064253,1167489,1280321,1182095,910937,877914,761701,294116,1171432,1312241,30577,809356,1057511',@StaffID=N'-1',@schoolyearid=114,@SortOrder=N'99'
+--MODIFICATION HISTORY  :x` 
+--DATE                EMAIL                   DESCRIPTION 
+ Bug Fix for 19930 : vk 
+ Bug fix for IM1513282  : veena kamesh 
+ Bug Fix for 51176    :Sarath : Summer School Application Report Not Displaying Course Requests Correctly : Added Schoolyearid filter
+ Bug fix for 51179    :Sarath  : Summer School Application  Do not generate for 2013/14 summer school enrollments: Added Schoolyearid filter
+ Bug Fix for 58134     praveen.chandra@lausd.net Join with schoolyear to get endingyear and then add additional years for Grad Year
+ Enhancement 76660   : Marupakula Vinod   Added Parameters SchoolYear and Sort Order. 
+**************************************************************************************************************************************************/
+AS 
+  BEGIN 
+      SET NOCOUNT ON 
+
+      BEGIN TRY
+
+          DECLARE @tblSchoolID TABLE (schoolid INT) 
+
+          DECLARE @tblGradeLevelID TABLE (gradelevelid CHAR(5))
+   
+  DECLARE @tblCounsellorID TABLE  (counsellorid INT)
+   
+  DECLARE @tblStaffID TABLE (StaffID INT)
+
+  DECLARE @Today DATE = Getdate() -- Get today's date here 
+
+          DECLARE @NewLineChar AS CHAR(2) = Char(13) + Char(10) 
+
+  DECLARE @tblStudentID TABLE (studentid INT) 
+
+  IF ( Object_id('#schooltermDate') IS NOT NULL ) 
+            BEGIN 
+                DROP TABLE #schooltermDate
+            END 
+
+    CREATE Table #schooltermDate
+( SchoolId INT,
+SchoolDate Date
+)
+
+  IF ( Object_id('tempdb.dbo.#SummerSchoolPeriod') IS NOT NULL ) 
+            BEGIN 
+                DROP TABLE #summerschoolperiod 
+            END 
+  
+          CREATE TABLE #summerschoolperiod 
+            ( 
+               [studentid]          [INT], 
+               [studentcode]        [NVARCHAR](25), 
+               [studentname]        [NVARCHAR](150),
+   [StudentLastName]    [NVARCHAR](50), 
+               [classof]            [INT], 
+               [studentgradelevel]  [NVARCHAR](2), 
+               [homelanguage]       [NVARCHAR](100), 
+               [parentguardianname] [NVARCHAR](150), 
+               [parentguardianid]   [INT], 
+               [addressline]        [NVARCHAR](200), 
+               [schoolnumber]       [NVARCHAR](50), 
+               [schoolid]           [INT], 
+               [schoolname]         [NVARCHAR](100), 
+               [costcentercode]     [NVARCHAR](10), 
+               [schoolphone]        [NVARCHAR](25), 
+               [conid]              [INT], 
+               [counsellorname]     [NVARCHAR](150), 
+               [managerstaffid]     [INT], 
+               [administratorname]  [NVARCHAR](150), 
+[homephone]          [NVARCHAR](110), 
+               [workphone]          [NVARCHAR](110), 
+               [cellphone]          [NVARCHAR](110), 
+               [programpriority]    [INT], 
+               [course1]            [NVARCHAR](50), 
+               [course2]            [NVARCHAR](50), 
+               [course3]            [NVARCHAR](50), 
+               [course4]            [NVARCHAR](50), 
+               [summerschoolname]   [NVARCHAR](100), 
+               [summerprogram]      [NVARCHAR](200), 
+               [schoolyearid]       [INT], 
+               [period]             [NVARCHAR](50),
+   [StaffId]              [INT],
+   [Teacher] [NVARCHAR](150)
+) 
+
+IF ( Object_id('tempdb.dbo.#SortBySummerSchoolPeriod') IS NOT NULL ) 
+            BEGIN 
+                DROP TABLE #SortBySummerSchoolPeriod
+            END 
+
+CREATE TABLE #SortBySummerSchoolPeriod 
+            ( 
+               [studentid]          [INT], 
+               [studentcode]        [NVARCHAR](25), 
+               [studentname]        [NVARCHAR](150),
+   [StudentLastName]    [NVARCHAR](50), 
+               [classof]            [INT], 
+               [studentgradelevel]  [NVARCHAR](2), 
+               [homelanguage]       [NVARCHAR](100), 
+               [parentguardianname] [NVARCHAR](150), 
+               [parentguardianid]   [INT], 
+               [addressline]        [NVARCHAR](200), 
+               [schoolnumber]       [NVARCHAR](50), 
+               [schoolid]           [INT], 
+               [schoolname]         [NVARCHAR](100), 
+               [costcentercode]     [NVARCHAR](10), 
+               [schoolphone]        [NVARCHAR](25), 
+               [conid]              [INT], 
+               [counsellorname]     [NVARCHAR](150), 
+               [managerstaffid]     [INT], 
+               [administratorname]  [NVARCHAR](150), 
+               [homephone]          [NVARCHAR](110), 
+               [workphone]          [NVARCHAR](110), 
+               [cellphone]          [NVARCHAR](110), 
+               [programpriority]    [INT], 
+               [course1]            [NVARCHAR](50), 
+               [course2]            [NVARCHAR](50), 
+               [course3]            [NVARCHAR](50), 
+               [course4]            [NVARCHAR](50), 
+               [summerschoolname]   [NVARCHAR](100), 
+               [summerprogram]      [NVARCHAR](200), 
+               [schoolyearid]       [INT], 
+               [period]             [NVARCHAR](50),
+   [Teacher] [NVARCHAR](150),
+   RowID INT
+)
+
+          INSERT INTO @tblSchoolID (schoolid) 
+          SELECT value 
+          FROM   dbo.Fnsplitid(@SchoolID, ',') 
+          --StudentSuspensionTypeDescription 
+
+          INSERT INTO @tblGradeLevelID (gradelevelid) 
+          SELECT value 
+          FROM   dbo.Fnsplit(@GradeLevelID, ',', DEFAULT) 
+
+          INSERT INTO @tblCounsellorID (counsellorid) 
+          SELECT value 
+          FROM   dbo.Fnsplitid(@CounsellorID, ',') 
+
+  INSERT INTO @tblStaffID (StaffID)
+  SELECT value
+  FROM dbo.Fnsplitid(@StaffID, ',')
+          
+  Insert INTo #schooltermDate
+Select sch.SchoolID,
+Case when @today> MAX(st.EndDate) 
+  then Max(st.EndDate)
+      Else @today END AS enddate
+From school sch
+INNER JOIN SchoolTerm st 
+On sch.SchoolID=st.SchoolID
+GROUP BY sch.SchoolID
+
+INSERT INTO @tblStudentID 
+                      (studentid) 
+          SELECT value 
+          FROM   dbo.Fnsplitid(@StudentID, ',') 
+
+
+          INSERT INTO #summerschoolperiod 
+          SELECT DISTINCT STU.studentid, 
+                          STU.studentcode, 
+                          Isnull(STU.firstname, '') + ' '  
+                          + Isnull(STU.middlename, '') + ' ' 
+                          + Isnull(STU.lastname, '') 
+                          AS 
+                          StudentName,
+  STU.lastname As StudentLastName, 
+                schy2.endingyear 
+                          ClassOF 
+                     , 
+                          glt.gradelevelcode 
+                          AS 
+                          StudentGradeLevel, 
+                          CASE 
+                            WHEN spg.language IS NULL THEN 'ENGLISH' 
+                            ELSE spg.language 
+                          END 
+                          AS 
+                          HomeLanguage, 
+                          Isnull(spg.lastname, '') + CASE WHEN 
+                          Isnull(spg.firstname, 
+                          '') = 
+                          '' THEN '' ELSE 
+                          ', ' + Isnull(spg.firstname, '') END + ' ' 
+                          + Isnull(spg.middlename, '') 
+                          AS 
+                          ParentGuardianName, 
+                          spg.parentguardianid, 
+                          CASE WHEN Isnull(spg.addressline1, '') = '' THEN '' 
+                          ELSE 
+                          Isnull(spg.addressline1, '') + @NewLineChar END + 
+                          Isnull(spg.city, '') + CASE 
+                          WHEN 
+                          Isnull(spg.state, '') <> '' THEN COALESCE(', ' + 
+                          spg.state, 
+                          '') 
+                          ELSE '' END 
+                          + COALESCE(' ' + spg.zip, '') 
+                          AddressLine 
+                          , 
+                          SCH.schoolnumber, 
+                          SCH.schoolid, 
+                          ( Ltrim(Rtrim(sch.schoolname)) + ' - ' 
+                            + Ltrim(Rtrim(cc.costcentercode)) ) 
+                          SchoolName 
+                          , 
+                          CC.costcentercode 
+                          AS 
+                          [CostCenterCode], 
+                          dbo.Fnformatphonenumber(Isnull(FC.phone, 0)) 
+                          AS 
+                          SchoolPhone, 
+                          S.staffid 
+                          ConId, 
+                          Isnull(S.lastname, '') + CASE WHEN Isnull(S.firstname, 
+                          '') = 
+                          '' 
+                          THEN '' ELSE 
+                          ', ' + Isnull(S.firstname, '') END + ' ' 
+                          + Isnull(S.middlename, '') 
+                          AS 
+                          [CounsellorName], 
+                          fc.managerstaffid, 
+                          Isnull(SF.lastname, '') + CASE WHEN 
+                          Isnull(SF.firstname, 
+                          '') 
+                          = 
+                          '' THEN '' ELSE 
+                          ', ' + Isnull(SF.firstname, '') END + ' ' 
+                          + Isnull(SF.middlename, '') 
+                          AS 
+                          AdministratorName, 
+                          HP.HomePhone, 
+                          WP.WorkPhone, 
+  CP.CellPhone, 
+                          CRS.programpriority /* Summer School Info*/ 
+                          , 
+                          CRS.course1, 
+                          CRS.course2, 
+                          CRS.course3, 
+                          CRS.course4, 
+                          CRS.summerschoolname, 
+                          CRS.summerprogram, 
+                          CRS.schoolyearid, 
+                          ssperiod.NAME AS Period,
+  ssperiod.StaffId,
+  ssperiod.StaffName As Teacher
+    FROM   student STU 
+                 INNER JOIN @tblStudentID tstu 
+                         ON stu.studentid = tstu.studentid 
+                 INNER JOIN studenthomeschool AS SHS 
+                         ON STU.studentid = shs.studentid 
+Inner Join #schooltermDate std
+  ON std.SchoolId=shs.SchoolID
+         AND std.SchoolDate BETWEEN entrydate AND exitdate 
+       -- Student is still enrolled--//Current School Info 
+                 INNER JOIN (SELECT SC.studentid, 
+                                    gradelevelid, 
+                                    schoolyearid, 
+                                    Row_number() 
+                                      OVER ( 
+                                        partition BY Sc.studentid 
+                                        ORDER BY effectivestartdate DESC) 
+                                    RowInfo1 
+                             FROM   studentcohort SC 
+INNER JOIN @tblStudentID tsd
+ON sc.StudentID=tsd.studentid
+                             WHERE  schoolyearid = 116) SC 
+                         ON STU.studentid = SC.studentid 
+                            AND rowinfo1 = 1 
+                 INNER JOIN school AS SCH 
+                         ON SHS.schoolid = SCH.schoolid 
+                 INNER JOIN @tblSchoolID tsch 
+                         ON Tsch.schoolid = sch.schoolid 
+                 INNER JOIN schoolattribute AS SCHA 
+                         ON SCH.schoolid = SCHA.schoolid 
+                            AND SCHA.schoolyearid = 116 
+                 INNER JOIN costcenter AS CC 
+                         ON SCHA.costcenterid = CC.costcenterid 
+                 INNER JOIN schoolyear AS SCHY 
+                         ON SC.schoolyearid = SCHY.schoolyearid 
+                            AND SCHA.schoolyearid = 116 
+                            AND SCHA.schoolyearid = SCHY.schoolyearid 
+                          --  AND SCHY.endingyear = 
+                          --      dbo.Get_sme_school_year(Getdate()) 
+                 --Shool Year 
+                 INNER JOIN gradeleveltype AS GLT 
+                         ON SC.gradelevelid = GLT.gradelevelid
+INNER JOIN  @tblGradeLevelID TGLT
+ON TGLT.gradelevelid= GLT.gradelevelid  
+                 INNER JOIN facility fc 
+                        ON fc.facilityid = SCH.facilityid
+LEFT JOIN
+(SELECT SC.studentid,
+CASE WHEN LEN(c.ContactInformation)< 9
+THEN Max(c.ContactInformation)
+ELSE
+Max('(' + LEFT(C.contactinformation, 3) + ') '  
+                                      + Substring(C.contactinformation, 4, 3)+
+                                      '-' 
+                                      + 
+  CASE WHEN LEN(c.ContactInformation)> 6
+THEN RIGHT(C.contactinformation, 
+                                      (Len(C.contactinformation)-6)) END)
+  END AS HomePhone
+                           /* PHONE INFO*/ 
+                           FROM   studentcontact SC 
+                                  INNER JOIN contact C 
+                                          ON SC.contactid = C.contactid 
+                                  INNER JOIN contacttype CT 
+                                          ON C.contacttypeid = CT.contacttypeid 
+                                  INNER JOIN contactlocationtype CL 
+                                          ON C.contactlocationtypeid = 
+                                             CL.contactlocationtypeid 
+                                  INNER JOIN student S 
+                                          ON S.studentid = SC.studentid 
+                           WHERE  CT.contacttypeid = 102 
+                                  AND CL.contactlocationtypeid = 100
+   Group By SC.studentid,c.ContactInformation) HP
+ON HP.Studentid=stu.StudentID
+LEFT JOIN (SELECT pgl.parentguardianid, 
+             spg.studentid, 
+                                   pg.lastname, 
+                                   pg.firstname, 
+                                   pg.middlename, 
+                                   Isnull(lt.language, 'ENGLISH') LANGUAGE, 
+                                   A.addressline1, 
+                                   A.city, 
+                                   A.state, 
+                                   A.zip 
+                            FROM   (SELECT spg.studentid, 
+                                           parentguardianid, 
+                                           Row_number() 
+                                             OVER ( 
+                                               partition BY spg.studentid 
+                                               ORDER BY precedence) RowInfo 
+                                    FROM   studentparentguardian spg 
+INNER JOIN @tblStudentID tbs
+ON tbs.studentid=spg.StudentID
+                                    WHERE  primaryguardianflag = 1) spg 
+                                   INNER JOIN parentguardian pg 
+                                           ON pg.parentguardianid = 
+                                              spg.parentguardianid 
+                                   INNER JOIN parentguardianlocation pgl 
+                                           ON pgl.parentguardianid = 
+                                              pg.parentguardianid 
+                                   INNER JOIN [address] a 
+                                           ON a.addressid = pgl.addressid 
+                                              AND addresstypeid = 100 
+                                   -- home address   
+                                   LEFT JOIN languagetype lt 
+                                          ON lt.languagecodeid = 
+                           pg.languagecodeid) 
+                           spg 
+                        ON spg.studentid = STU.studentid
+ 
+Left JOIN (SELECT PGC.parentguardianid,
+CASE WHEN LEN(cont.ContactInformation)< 9
+THEN Max(cont.ContactInformation) 
+ELSE
+Max('(' + LEFT(CONT.contactinformation, 3) + 
+                                      ') ' 
+                                      + Substring(CONT.contactinformation, 4, 3)
+                                      + '-' 
+                                      + CASE WHEN LEN(cont.ContactInformation)> 6
+  THEN RIGHT(CONT.contactinformation, 
+                                      (Len(CONT.contactinformation)-6))END)
+  END AS WorkPhone 
+                           FROM   parentguardiancontact pgc 
+                                  INNER JOIN contact CONT 
+                                          ON pgc.contactid = CONT.contactid 
+                                             AND CONT.contacttypeid = 102 
+                                             /*Phone*/ 
+                                             AND CONT.contactlocationtypeid = 
+                                                 102 
+  GROUP BY PGC.parentguardianid,cont.ContactInformation) WP
+  ON  spg.parentguardianid = WP.parentguardianid
+LEFT JOIN 
+(SELECT PGC.parentguardianid,
+CASE WHEN LEN(cont.ContactInformation)< 9
+THEN Max(cont.ContactInformation)
+ELSE
+Max('(' + LEFT(CONT.contactinformation, 3) + 
+                                      ') ' 
+                                      + Substring(CONT.contactinformation, 4, 3)
+                                      + '-' 
+                                      + CASE WHEN LEN(cont.ContactInformation)> 6
+  THEN RIGHT(CONT.contactinformation, 
+                                      (Len(CONT.contactinformation)-6))END)
+  END AS CellPhone
+                           FROM   parentguardiancontact pgc 
+                                  INNER JOIN contact CONT 
+                                   ON pgc.contactid = CONT.contactid 
+                                             AND CONT.contacttypeid = 102 
+                                             /*Phone*/ 
+                                             AND CONT.contactlocationtypeid = 
+                                                 104
+GROUP BY PGC.parentguardianid,cont.ContactInformation) CP
+ON CP.ParentGuardianID=spg.parentguardianid
+                 LEFT JOIN (Select t.Studentid,t.name,t.staffid,StaffName
+FROM(SELECT  SSec.studentid, 
+                                   sp.NAME,
+   Stf.staffid,
+   Stf.LastName + Stf.FirstName AS StaffName,
+   Rank() OVER (PARTITION BY Ssec.studentid ORDER BY sp.name ASC) AS RNK
+FROM   studentsection AS SSec 
+             INNER JOIN @tblStudentID pStu 
+                           ON SSec.studentid = pStu.studentid 
+                                   INNER JOIN section AS Sec 
+                                           ON Sec.sectionid = SSec.sectionid 
+                                   INNER JOIN studentsectionenrollment AS SSE 
+                                           ON SSE.studentsectionid = 
+                                              SSec.studentsectionid 
+                                   INNER JOIN sectionperiod SecP 
+                                           ON SecP.sectionid = Sec.sectionid 
+                                   INNER JOIN schoolperiod SP 
+                                           ON SP.periodid = SecP.periodid
+   INNER JOIN StaffsectIon S 
+   ON S.SectionID = Sec.SectionID 
+   AND @Today BETWEEN S.SectionAssignDate AND S.SectionEndDate
+   INNER JOIN Staff AS STF ON STF.StaffID =  S.StaffId
+   
+                            WHERE  SSE.activeflag = 1 
+                                   AND @Today BETWEEN SSE.sectionenrolldate 
+                                                         AND 
+                                                         SSE.sectionenddate) t
+) 
+                           ssperiod 
+                        ON ssperiod.studentid = STU.studentid 
+                 LEFT JOIN --counselor info 
+                 (SELECT stdgrp.studentid, 
+                         stdgrp.studentgroupid, 
+                         stf.firstname, 
+                         stf.lastname, 
+                         stf.middlename, 
+                         stf.staffid 
+                  FROM   groupcategory gc 
+                         INNER JOIN groupsubcategory gsc 
+                                 ON gsc.groupcategoryid = gc.groupcategoryid 
+                                    AND gsc.groupsubcategoryname = 'Counseling' 
+                                    AND gc.NAME = 'Administrative' 
+                         INNER JOIN [dbo].[group] grp 
+                                 ON grp.groupcategoryid = gc.groupcategoryid 
+                                    AND grp.groupsubcategoryid = 
+                                        gsc.groupsubcategoryid 
+                                    AND @Today BETWEEN 
+                                        Isnull(grp.effectivestartdate, 
+                                        @Today) AND 
+                                        Isnull(grp.effectiveenddate, 
+                                        @Today 
+                                        ) 
+                         INNER JOIN staff stf 
+                                 ON stf.staffid = grp.leaderstaffid 
+                         INNER JOIN @tblCounsellorID tc 
+                                 ON tc.counsellorid = stf.staffid 
+                         INNER JOIN studentgroup stdgrp 
+                                 ON stdgrp.groupid = grp.groupid
+INNER JOIN @tblStudentID tbs 
+ON tbs.studentid=stdgrp.StudentID 
+                         INNER JOIN studentgroupenrollment stg 
+    ON stg.studentgroupid = stdgrp.studentgroupid 
+                                    AND @Today BETWEEN stg.effectivestartdate 
+                                                       AND 
+                                                       stg.effectiveenddate 
+                 ) s 
+                        ON s.studentid = stu.studentid 
+                 LEFT JOIN staff SF 
+                        ON SF.staffid = FC.managerstaffid 
+                 /* Bug 58134 Fix  */ 
+                 LEFT OUTER JOIN schoolyear schy2 
+                              ON schy2.schoolyearid = 
+                                 STU.graduationrequirementyearid 
+                 /* Summer School/Course Info*/ 
+                 INNER JOIN (SELECT A.[studentid], 
+   A.schoolname  AS SummerSchoolName, 
+                               A.schoolid    AS SummerSchoolID, 
+                                    A.[summerschoolprogramtypedescription] AS SummerProgram, 
+                                    A.schoolyearid, 
+                                    Max(A.programpriority)                 AS ProgramPriority, 
+                                    Max(CASE 
+                                          WHEN rnk = 1 THEN 
+                                          '1. ' + A.fullcoursename 
+                                        END)                               AS Course1, 
+                                    Max(CASE 
+                                          WHEN rnk = 2 THEN 
+                                          '2. ' + A.fullcoursename 
+                                        END)                               AS  Course2, 
+                                    Max(CASE 
+                                          WHEN rnk = 3 THEN 
+                                          '3. ' + A.fullcoursename 
+                                        END)                               AS  Course3, 
+                                    Max(CASE 
+                                          WHEN rnk = 4 THEN 
+                                          '4. ' + A.fullcoursename 
+                                        END)                               AS  Course4 
+                             FROM   (SELECT 
+                            StSuSch.[studentid], 
+                            CM.coursenumber + '-' 
+                            + CM.abbreviatedcoursename 
+                            AS 
+                                    FullCourseName, 
+                            StSuSch.programpriority, 
+                            SCH.schoolname, 
+                            StSuSch.schoolid 
+                            , 
+                            SuSchPrgType.summerschoolprogramtypedescription, 
+                            Row_number() 
+                              OVER ( 
+                                partition BY StSuSch.[studentid] 
+                                ORDER BY StSuSch.studentid 
+                              , StSSCour.studentsummerschoolcourseid) AS 
+                                    RNK, 
+                            schoolyearid 
+                                     FROM   studentsummerschool AS StSuSch
+INNER JOIN @tblStudentID tbs
+ON  StSuSch.StudentID=tbs.studentid
+                            INNER JOIN studentsummerschoolcourse AS  StSSCour 
+                                    ON StSSCour.studentsummerschoolid  = 
+                                       StSuSch.studentsummerschoolid 
+                                       AND StSuSch.schoolyearid = 116 
+                            INNER JOIN summerschoolcourse AS SSCour 
+                                    ON SSCour.summerschoolcourseid = 
+                                       StSSCour.summerschoolcourseid 
+                            INNER JOIN coursemaster AS CM 
+                                    ON CM.courseid = SSCour.courseid 
+                            INNER JOIN summerschoolprogram AS 
+                         SumSchPrg 
+                                    ON SumSchPrg.summerschoolprogramid 
+                                       = 
+                                       StSuSch.summerschoolprogramid 
+                            INNER JOIN summerschoolprogramtype AS 
+                                       SuSchPrgType 
+                                    ON 
+                            SuSchPrgType.summerschoolprogramtypeid = 
+                            SumSchPrg.summerschoolprogramtypeid 
+                            INNER JOIN school AS SCH 
+                                    ON StSuSch.schoolid = SCH.schoolid 
+                                    ) AS 
+                                    A 
+                             WHERE  A.schoolyearid = 116 
+                          GROUP  BY A.schoolid, 
+                                       A.schoolname, 
+                                       A.studentid, 
+                                       A.summerschoolprogramtypedescription, 
+                                       A.schoolyearid) CRS 
+                         ON STU.studentid = CRS.studentid 
+ 
+
+          IF( @SortOrder = '99' ) 
+            BEGIN 
+                SELECT DISTINCT [studentid], 
+                                [studentcode], 
+                                [studentname],
+[StudentLastName], 
+                                [classof], 
+                                [studentgradelevel], 
+                                [homelanguage], 
+                                [parentguardianname], 
+                                [parentguardianid], 
+                                [addressline], 
+                                [schoolnumber], 
+                                [schoolid], 
+                                [schoolname], 
+                                [costcentercode], 
+                                [schoolphone], 
+                                [conid], 
+                                [counsellorname], 
+                                [managerstaffid], 
+                                [administratorname], 
+                                [homephone], 
+                                [workphone], 
+                                [cellphone], 
+                                [programpriority], 
+                                [course1], 
+                                [course2], 
+                                [course3], 
+                                [course4], 
+                                [summerschoolname], 
+                                [summerprogram], 
+                                [schoolyearid]
+                FROM   #summerschoolperiod 
+                ORDER  BY StudentLastName,studentname ASC 
+            END 
+          ELSE 
+            BEGIN 
+INSERT INTO #SortBySummerSchoolPeriod 
+SELECT DISTINCT [studentid], 
+                                [studentcode], 
+                                [studentname],
+[StudentLastName],  
+                                [classof], 
+                                [studentgradelevel], 
+                                [homelanguage], 
+                                [parentguardianname], 
+                                [parentguardianid], 
+                                [addressline], 
+                                [schoolnumber], 
+                                [schoolid], 
+                                [schoolname], 
+                                [costcentercode], 
+                                [schoolphone], 
+                                [conid], 
+                                [counsellorname], 
+                                [managerstaffid], 
+                                [administratorname], 
+                                [homephone], 
+                                [workphone], 
+                                [cellphone], 
+                                [programpriority], 
+                           [course1], 
+                                [course2], 
+                                [course3], 
+                                [course4], 
+                                [summerschoolname], 
+                                [summerprogram], 
+                                [schoolyearid] 
+,[Period]
+,[Teacher]
+,Row_number() 
+                              OVER ( 
+                                partition BY ssp.[studentid] 
+                                ORDER BY ssp.Period, ssp.Teacher,ssp.studentname) AS RowID 
+                FROM   #summerschoolperiod ssp
+INNER JOIN @tblStaffID ts 
+ON ssp.StaffID=ts.staffid
+Where ssp.period=@SortOrder
+
+Select [studentid], 
+                                [studentcode], 
+                                [studentname],
+[StudentLastName],  
+[classof], 
+                                [studentgradelevel], 
+                                [homelanguage], 
+                                [parentguardianname], 
+                                [parentguardianid], 
+                                [addressline], 
+                                [schoolnumber], 
+                                [schoolid], 
+                                [schoolname], 
+                                [costcentercode], 
+                                [schoolphone], 
+                                [conid], 
+                                [counsellorname], 
+                                [managerstaffid], 
+                                [administratorname], 
+                                [homephone], 
+                                [workphone], 
+                                [cellphone], 
+                                [programpriority], 
+                                [course1], 
+                                [course2], 
+                                [course3], 
+                                [course4], 
+                                [summerschoolname], 
+                                [summerprogram], 
+                                [schoolyearid] 
+,[Period]
+,[Teacher]
+,'' as sortperiod
+, RowID 
+from #SortBySummerSchoolPeriod 
+Union
+SELECT DISTINCT ssp.[studentid], 
+                                ssp.[studentcode], 
+                                ssp.[studentname],
+ssp.[StudentLastName], 
+                                ssp.[classof], 
+                                ssp.[studentgradelevel], 
+                                ssp.[homelanguage], 
+                                ssp.[parentguardianname], 
+                                ssp.[parentguardianid], 
+                                ssp.[addressline], 
+                                ssp.[schoolnumber], 
+                                ssp.[schoolid], 
+                                ssp.[schoolname], 
+                                ssp.[costcentercode], 
+                                ssp.[schoolphone], 
+                                ssp.[conid], 
+                                ssp.[counsellorname], 
+                                ssp.[managerstaffid], 
+                                ssp.[administratorname], 
+                                ssp.[homephone], 
+                                ssp.[workphone], 
+                                ssp.[cellphone], 
+                                ssp.[programpriority], 
+                                ssp.[course1], 
+                                ssp.[course2], 
+                                ssp.[course3], 
+                                ssp.[course4], 
+                                ssp.[summerschoolname], 
+                                ssp.[summerprogram], 
+                                ssp.[schoolyearid] 
+,ssp.[Period]
+,ssp.[Teacher]
+,sbp.Period as sortperiod
+,1+Row_number() 
+                              OVER ( 
+                        partition BY ssp.[studentid] 
+                                ORDER BY ssp.Period, ssp.Teacher,ssp.studentname) AS RowID   
+                 FROM  #summerschoolperiod ssp 
+LEFT Join #SortBySummerSchoolPeriod sbp
+ON ssp.studentid=sbp.studentid
+Where sbp.Period is Null 
+                ORDER  BY RowID,teacher,StudentLastName,studentname
+
+            END 
+      END TRY 
+
+      BEGIN CATCH
+          DECLARE @ModuleName    VARCHAR(50),
+                  @ProcedureName VARCHAR(50),
+                  @ErrorNumber   VARCHAR(10),
+                  @ErrorMessage  VARCHAR(300),
+                  @ErrorSeverity TINYINT,
+                  @ErrorState    TINYINT
+
+          SELECT @ModuleName = 'spRPTSummerSchoolApplication',
+                 @ProcedureName = Error_procedure(),
+                 @ErrorNumber = Error_number(),
+                 @ErrorMessage = Error_message(),
+                 @ErrorSeverity = Error_severity(),
+                 @ErrorState = Error_state()
+
+          RAISERROR (@ErrorMessage,@ErrorSeverity,@ErrorState)
+      END CATCH 
+  END
