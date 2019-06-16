@@ -5,6 +5,7 @@ public class GIT {
 		// TODO Auto-generated method stub
 
 		System.out.println("it is an git configurations for poll minute ");
+		System.out.println("updating agaiin");
 	}
 
 }
